@@ -48,21 +48,23 @@ func readValues() bool{
 }
 
 func main() {
-	var sucessRead
-	var successFind Planet
-	var targetPlanet Planet
+
+	var (
+	sucessRead bool
+	successFind Planet
+	)
 	/*Tests begin */
 	successRead = readValues()
 
 	fmt.Println(slicePlanets)
 	fmt.Println(sliceTransits)
 
-	success2 = searchTransits()
+	successFind = searchTransits()
 
 
 	/* Now trying to search and find the shortest path */
 	if successFind = nil {
-	fmt.Println("Darth Blockades ", targetPlanet.name)
+	fmt.Println("Darth Blockades ", successFind.name)
 	} else{
 	fmt.Println("Leia escapes with the plans!")
 }
