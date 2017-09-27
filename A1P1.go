@@ -23,11 +23,11 @@ func main() {
 	fmt.Scan(&numPlanets)
 	fmt.Println("you selected ", numPlanets)
 	/* array of planets */
-	var planets [numPlanets]string
+	var slicePlanets = make([]string,numPlanets)
 	fmt.Println("Give me an int for numConnections please")
 	fmt.Scan(&numConnections)
 	/* array of edges */
-	var transits [numConnections]Edge
+	var sliceTransits = make([]Edge,numConnections)
 	fmt.Println("you selected ", numConnections)
 
 	fmt.Println("Give me a string to read please")
