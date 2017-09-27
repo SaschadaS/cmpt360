@@ -2,13 +2,26 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
+/* Darth Vader's least expensive blockade program */
+
 func main() {
-	fmt.Println("Welcome to the playground!")
+	/*Tests begin */
 
-	fmt.Println("The time is", time.Now())
+	/* Can we read values from user? */
+	var numPlanets, numConnections int
+	var edges string
+
+	fmt.Println("Give me an int for numPlanets please\n")
+	fmt.Scanln(numPlanets)
+	fmt.Println("you selected %d", numPlanets)
+	fmt.Println("Give me an int for numConnections please\n")
+	fmt.Scanln(numConnections)
+	fmt.Println("you selected %d", numConnections)
+
+	fmt.Println("Give me a string to read please\n")
+	fmt.Scanln(edges)
+
 }
-
 
