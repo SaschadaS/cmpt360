@@ -14,14 +14,15 @@ func main() {
 	var edges string
 
 	fmt.Println("Give me an int for numPlanets please\n")
-	fmt.Scanln(numPlanets)
-	fmt.Println("you selected %d", numPlanets)
+	fmt.Scan(&numPlanets)
+	fmt.Println("you selected ", numPlanets)
 	fmt.Println("Give me an int for numConnections please\n")
-	fmt.Scanln(numConnections)
-	fmt.Println("you selected %d", numConnections)
+	fmt.Scan(&numConnections)
+	fmt.Println("you selected ", numConnections)
 
 	fmt.Println("Give me a string to read please\n")
-	fmt.Scanln(edges)
+	fmt.Scan(&edges)
+	fmt.Println("You gave me ", edges)
 
 }
 
