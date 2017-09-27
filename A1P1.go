@@ -17,24 +17,27 @@ func main() {
 
 	/* Can we read values from user? */
 	var numPlanets, numConnections int
-	var transit1 Edge
 
 	fmt.Println("Give me an int for numPlanets please")
 	fmt.Scan(&numPlanets)
 	fmt.Println("you selected ", numPlanets)
 	/* array of planets */
 	var slicePlanets = make([]string,numPlanets)
+	for i := 0; i < numPlanets; i++ {
+		fmt.Scan(&slicePlanets[i])
+	}
+
 	fmt.Println("Give me an int for numConnections please")
 	fmt.Scan(&numConnections)
 	/* array of edges */
 	var sliceTransits = make([]Edge,numConnections)
 	fmt.Println("you selected ", numConnections)
+	for j := 0; j < numConnections; j++ {
+		fmt.Scan(&sliceTransits[j].startPlanet)
+		fmt.Scan(&sliceTransits[j].endPlanet)
+	}
 
-	fmt.Println("Give me a string to read please")
-	fmt.Scan(&transit1.startPlanet)
-	fmt.Scan(&transit1.endPlanet)
-	transits[0] = transit1
-	fmt.Println("You gave me ", transit1)
-
+	fmt.Println(slicePlanets)
+	fmt.Println(sliceTransits)
 }
 
