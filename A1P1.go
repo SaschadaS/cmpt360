@@ -12,7 +12,7 @@ type Edge struct {
 type Planet struct {
 	name string
 	cost int
-	parent string
+	children []Planet
 	numTransits int
 }
 
@@ -23,10 +23,9 @@ type Tree struct{
 
 /* Darth Vader's least expensive blockade program */
 
-func readValues() bool{
+func readPlanets() []Planet{
 
-	/* Can we read values from user? */
-	var numPlanets, numConnections int
+	var numPlanets int
 
 	fmt.Println("Give me an int for numPlanets please")
 	fmt.Scan(&numPlanets)
@@ -36,7 +35,12 @@ func readValues() bool{
 		fmt.Scan(&slicePlanets[i].name)
 		fmt.Scan(&slicePlanets[i].cost)
 	}
+	return slicePlanets
+}
 
+func readTransits() []Edge{
+
+	var numConnections int
 	fmt.Println("Give me an int for numConnections please")
 	fmt.Scan(&numConnections)
 	/* array of edges */
@@ -45,25 +49,28 @@ func readValues() bool{
 		fmt.Scan(&sliceTransits[j].startPlanet)
 		fmt.Scan(&sliceTransits[j].endPlanet)
 	}
+	return sliceTransits
 
-	return true;
 }
 
 func searchTransits(arrayPlanets []Planet, arrayTransits []Edge) Planet{
 	var target Planet
 
-	for i, p := range arrayPlanets{
-		for j, t := range arrayTransits{
+	for _, p := range arrayPlanets{
+		for _, p2 := range arrayPlanets{
+			for _, t := range arrayTransits{
 
-		if p.name == t.startPlanet{
-			p.numTransits++
-		}else if p.name == t.endPlanet{
-			p.parent = t.startPlanet
-		}
+			if p.name == t.startPlanet && p2.name == t.endPlanet{
+				p.numTransits++
+				p.children = append(p.children,p2)
+			}
 
 
+			}
 		}
 	}
+
+
 	return target
 }
 
@@ -71,11 +78,11 @@ func searchTransits(arrayPlanets []Planet, arrayTransits []Edge) Planet{
 func main() {
 
 	var (
-	sucessRead bool
+	successRead bool
 	successFind Planet
 	)
 	/*Tests begin */
-	//successRead = readValues()
+
 
 	/* Can we read values from user? */
 	var numPlanets, numConnections int
@@ -97,7 +104,9 @@ func main() {
 		fmt.Scan(&sliceTransits[j].startPlanet)
 		fmt.Scan(&sliceTransits[j].endPlanet)
 	}
-	successRead = true
+	if successRead == true {
+	fmt.Println("filler")
+	}
 
 	fmt.Println(slicePlanets)
 	fmt.Println(sliceTransits)
