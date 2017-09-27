@@ -12,7 +12,7 @@ type Edge struct {
 type Planet struct {
 	name string
 	cost int
-	parent Planet
+	parent string
 	numTransits int
 }
 
@@ -33,8 +33,8 @@ func readValues() bool{
 	/* array of planets */
 	var slicePlanets = make([]Planet,numPlanets)
 	for i := 0; i < numPlanets; i++ {
-		fmt.Scan(&slicePlanets.name[i])
-		fmt.Scan(&slicePlanets.cost[i])
+		fmt.Scan(&slicePlanets[i].name)
+		fmt.Scan(&slicePlanets[i].cost)
 	}
 
 	fmt.Println("Give me an int for numConnections please")
@@ -45,7 +45,28 @@ func readValues() bool{
 		fmt.Scan(&sliceTransits[j].startPlanet)
 		fmt.Scan(&sliceTransits[j].endPlanet)
 	}
+
+	return true;
 }
+
+func searchTransits(arrayPlanets []Planet, arrayTransits []Edge) Planet{
+	var target Planet
+
+	for i, p := range arrayPlanets{
+		for j, t := range arrayTransits{
+
+		if p.name == t.startPlanet{
+			p.numTransits++
+		}else if p.name == t.endPlanet{
+			p.parent = t.startPlanet
+		}
+
+
+		}
+	}
+	return target
+}
+
 
 func main() {
 
@@ -54,18 +75,40 @@ func main() {
 	successFind Planet
 	)
 	/*Tests begin */
-	successRead = readValues()
+	//successRead = readValues()
+
+	/* Can we read values from user? */
+	var numPlanets, numConnections int
+
+	fmt.Println("Give me an int for numPlanets please")
+	fmt.Scan(&numPlanets)
+	/* array of planets */
+	var slicePlanets = make([]Planet,numPlanets)
+	for i := 0; i < numPlanets; i++ {
+		fmt.Scan(&slicePlanets[i].name)
+		fmt.Scan(&slicePlanets[i].cost)
+	}
+
+	fmt.Println("Give me an int for numConnections please")
+	fmt.Scan(&numConnections)
+	/* array of edges */
+	var sliceTransits = make([]Edge,numConnections)
+	for j := 0; j < numConnections; j++ {
+		fmt.Scan(&sliceTransits[j].startPlanet)
+		fmt.Scan(&sliceTransits[j].endPlanet)
+	}
+	successRead = true
 
 	fmt.Println(slicePlanets)
 	fmt.Println(sliceTransits)
 
-	successFind = searchTransits()
-
+	successFind = searchTransits(slicePlanets, sliceTransits)
 
 	/* Now trying to search and find the shortest path */
-	if successFind = nil {
+	if successFind.name != "Sarif" {
 	fmt.Println("Darth Blockades ", successFind.name)
 	} else{
 	fmt.Println("Leia escapes with the plans!")
+	}
 }
 
