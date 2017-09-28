@@ -47,22 +47,25 @@ func setTransits(arrayPlanets []Planet, arrayTransits []Edge) []Planet{
 }
 
 
-func DFS(root Planet, arrayPlanets []Planet)int{
+func DFS(root int, arrayPlanets []Planet)int{
 	var goal int
 	var isArtPoint bool
+	var x int
 
-	root.found = true
-	for len(root.children) > 0 {
+	arrayPlanets[root].found = true
+	for len(arrayPlanets[root].children) > 0 {
 
-	x, root.children :=root.children[0], root.children[1:]
+	x = arrayPlanets[root].children[0]
+	arrayPlanets[root].children = arrayPlanets[root].children[1:]
 
 	if (arrayPlanets[x].found == false) {
 	isArtPoint = checkArticulation(arrayPlanets, x)
 
-	if isArtPoint == true && x.cost < goal.cost
+	if isArtPoint == true && arrayPlanets[x].cost < arrayPlanets[goal].cost{
 		goal = x
+	}
 
-	DFS(arrayPlanets[x], arrayPlanets)
+	DFS(x, arrayPlanets)
 	}
 	}
 
@@ -70,18 +73,19 @@ func DFS(root Planet, arrayPlanets []Planet)int{
 	return goal
 }
 
-func checkArticulation(arrayPlanets []Planet, int id)bool{
+func checkArticulation(arrayPlanets []Planet,  id int)bool{
 	for i := 0; i < arrayPlanets[id].numTransits; i++ {
-		if arrayPlanets[arrayPlanets.children[i]].found==true {
+		if arrayPlanets[arrayPlanets[id].children[i]].found==true {
 		return false
 		}else{
-		checkArticulation(arrayPlanets, arrayPlanets[arrayPlanets.children[i]])
+		checkArticulation(arrayPlanets, arrayPlanets[id].children[i])
 		return true
 		}
 	}
+	return false
 }
 
-func main() {
+func main(){
 
 	var (
 	successFind []Planet
@@ -131,10 +135,10 @@ func main() {
 
 	/* sets int to planet.id of best articulation point, 
 	or 0 if no point exists. */
-	target = searchTransits(sucessFind, root, 0)
+	target = DFS(root, successFind)
 
-	if target == root {
-		fmt.Println("Darth Blockades ", successFind.name)
+	if target != root {
+		fmt.Println("Darth Blockades ", slicePlanets[target].name)
 	} else{
 		fmt.Println("Leia escapes with the plans!")
 	}
