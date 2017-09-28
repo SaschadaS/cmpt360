@@ -10,87 +10,96 @@ type Edge struct {
 }
 
 type Planet struct {
+	id int
 	name string
 	cost int
-	children []Planet
+	children []int
+	parents []int
 	numTransits int
+	found bool
 }
 
-type Tree struct{
-	root Planet
-	curCost int
-}
+
 
 /* Darth Vader's least expensive blockade program */
 
-func readPlanets() []Planet{
-
-	var numPlanets int
-
-	fmt.Println("Give me an int for numPlanets please")
-	fmt.Scan(&numPlanets)
-	/* array of planets */
-	var slicePlanets = make([]Planet,numPlanets)
-	for i := 0; i < numPlanets; i++ {
-		fmt.Scan(&slicePlanets[i].name)
-		fmt.Scan(&slicePlanets[i].cost)
-	}
-	return slicePlanets
-}
-
-func readTransits() []Edge{
-
-	var numConnections int
-	fmt.Println("Give me an int for numConnections please")
-	fmt.Scan(&numConnections)
-	/* array of edges */
-	var sliceTransits = make([]Edge,numConnections)
-	for j := 0; j < numConnections; j++ {
-		fmt.Scan(&sliceTransits[j].startPlanet)
-		fmt.Scan(&sliceTransits[j].endPlanet)
-	}
-	return sliceTransits
-
-}
-
 func setTransits(arrayPlanets []Planet, arrayTransits []Edge) []Planet{
+	//var source, dest Planet
 
 	for i, p := range arrayPlanets{
-		for _, p2 := range arrayPlanets{
+		for j, p2 := range arrayPlanets{
 			for _, t := range arrayTransits{
-			//fmt.Println(p.name, t.startPlanet, t.endPlanet)
+
 			if p.name == t.startPlanet && p2.name == t.endPlanet{
 				arrayPlanets[i].numTransits = arrayPlanets[i].numTransits + 1
-				arrayPlanets[i].children = append(arrayPlanets[i].children, p2)
+				arrayPlanets[j].numTransits = arrayPlanets[j].numTransits + 1
+				//source = arrayPlanets[i]
+				//dest = arrayPlanets[j]
+				arrayPlanets[i].children = append(arrayPlanets[i].children, p2.id)
+				arrayPlanets[j].children = append(arrayPlanets[j].children, p.id)
 			}
 
-
 			}
+
 		}
-
 	}
 	return arrayPlanets
 }
 
 
+func DFS(root Planet, arrayPlanets []Planet)int{
+	var goal int
+	var isArtPoint bool
+
+	root.found = true
+	for len(root.children) > 0 {
+
+	x, root.children :=root.children[0], root.children[1:]
+
+	if (arrayPlanets[x].found == false) {
+	isArtPoint = checkArticulation(arrayPlanets, x)
+
+	if isArtPoint == true && x.cost < goal.cost
+		goal = x
+
+	DFS(arrayPlanets[x], arrayPlanets)
+	}
+	}
+
+
+	return goal
+}
+
+func checkArticulation(arrayPlanets []Planet, int id)bool{
+	for i := 0; i < arrayPlanets[id].numTransits; i++ {
+		if arrayPlanets[arrayPlanets.children[i]].found==true {
+		return false
+		}else{
+		checkArticulation(arrayPlanets, arrayPlanets[arrayPlanets.children[i]])
+		return true
+		}
+	}
+}
+
 func main() {
 
 	var (
-	successRead bool
 	successFind []Planet
-	root int
+	root, numPlanets, numConnections, target int
+	// slicePlanets will be a slice of all given planets
+	// sliceTransits will be a slice of all given transits
 	)
+
 	/*Tests begin */
-
-
-	/* Can we read values from user? */
-	var numPlanets, numConnections int
-
+	/* read number of planets*/
 	fmt.Scan(&numPlanets)
-	/* array of planets */
+	/* set array of planets to size numPlanets */
 	var slicePlanets = make([]Planet,numPlanets)
+	/* reads in n planets into slicePlanets, where n is
+	size of numPlanets  */
 	for i := 0; i < numPlanets; i++ {
 		fmt.Scan(&slicePlanets[i].name)
+		slicePlanets[i].id = i
 		if (slicePlanets[i].name == "Scarif"){
 			slicePlanets[i].cost = 0
 			root = i
@@ -101,26 +110,33 @@ func main() {
 		}
 	}
 
+	/* reads in numConnections from stdin */
 	fmt.Scan(&numConnections)
-	/* array of edges */
+	/* set array of transits to size numConnections */
 	var sliceTransits = make([]Edge,numConnections)
+	/* reads in n transits into sliceTransits, where n
+	is of numConnections */
 	for j := 0; j < numConnections; j++ {
 		fmt.Scan(&sliceTransits[j].startPlanet)
 		fmt.Scan(&sliceTransits[j].endPlanet)
 	}
-	if successRead == true {
-		fmt.Println("filler")
+
+	/* sets the values of the Planets for searching */
+	successFind = setTransits(slicePlanets, sliceTransits)
+
+	/* prints values for each planet */
+	for l := 0; l < numPlanets; l++ {
+	fmt.Println("Record:", successFind[l])
 	}
 
-	successFind = setTransits(slicePlanets, sliceTransits)
-	fmt.Println(successFind[root])
+	/* sets int to planet.id of best articulation point, 
+	or 0 if no point exists. */
+	target = searchTransits(sucessFind, root, 0)
 
-	target := searchTransits(sucessFind)
-	/* Now trying to search and find the shortest path */
-	//if successFind.name != "Scarif" {
-	//	fmt.Println("Darth Blockades ", successFind.name)
-	//} else{
-	//	fmt.Println("Leia escapes with the plans!")
-//	}
+	if target == root {
+		fmt.Println("Darth Blockades ", successFind.name)
+	} else{
+		fmt.Println("Leia escapes with the plans!")
+	}
 }
 
