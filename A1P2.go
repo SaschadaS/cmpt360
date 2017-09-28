@@ -41,8 +41,8 @@ func readQuery(numQueries int) *[]query {
 	return &QueryData
 }
 
-func checkQueries(queryData *[]query, traceData *[]trace, isInfected []bool){
-for _, y := range *queryData {
+func checkQueries(queryData []query, traceData []trace, isInfected []bool){
+for _, y := range queryData {
 
 	if isInfected[y.endComp+1] == true{
 	fmt.Println("Y")
@@ -57,18 +57,16 @@ func main(){
 var numComputers, numTrace, numQueries int
 fmt.Scanln(&numComputers)
 fmt.Scanln(&numTrace)
-//var isInfected []bool
+isInfected := make([]bool, numComputers)
 traceData := make([]trace, numTrace)
-//var queryData []query
-fmt.Scan(&traceData[0].source)
-fmt.Scan(&traceData[0].destination)
-fmt.Scan(&traceData[0].time)
-fmt.Println(traceData[0])
-//var traceData *[]trace =readTrace(numTrace)
-fmt.Scan(numQueries)
-//var queryData *[]query =readQuery(numQueries)
+for _, a := range traceData {
+	fmt.Scan(&a.source, &a.destination, &a.time)
+}
 
-//checkQueries(queryData, traceData, isInfected)
+fmt.Scan(numQueries)
+queryData := make([]query, numQueries)
+
+checkQueries(queryData, traceData, isInfected)
 
 fmt.Println("Compiled successfully!")
 
