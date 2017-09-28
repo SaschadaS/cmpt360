@@ -114,7 +114,7 @@ func main() {
 	successFind = searchTransits(slicePlanets, sliceTransits)
 
 	/* Now trying to search and find the shortest path */
-	if successFind.name != "Sarif" {
+	if successFind.name != "Scarif" {
 	fmt.Println("Darth Blockades ", successFind.name)
 	} else{
 	fmt.Println("Leia escapes with the plans!")
