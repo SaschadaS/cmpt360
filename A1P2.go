@@ -38,6 +38,7 @@ for i, a := range traceData {
 
 fmt.Scanln(&numQueries)
 queryData := make([]query, numQueries)
+queryOutput := make([]string, numQueries)
 for j, b := range queryData {
 	fmt.Scanln(&b.startComp, &b.startTime, &b.endComp, &b.endTime)
 	queryData[j] = b
@@ -51,17 +52,19 @@ for j, b := range queryData {
 		}
 	}
 	if isInfected[b.endComp-1] == true {
-		fmt.Println("Y")
+		queryOutput[j] = "Y"
 	} else {
-		fmt.Println("N")
+		queryOutput[j] = "N"
 	}
 	for k := 0; k < numComputers; k++{
 		isInfected[k] = false
 	}
 }
 
-fmt.Println(isInfected, traceData, queryData)
-fmt.Println("Compiled successfully!")
+for l := 0; l < numQueries; l++ {
+	fmt.Println(queryOutput[l])
+}
+
 
 }
 
