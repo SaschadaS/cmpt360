@@ -53,25 +53,23 @@ func readTransits() []Edge{
 
 }
 
-func searchTransits(arrayPlanets []Planet, arrayTransits []Edge) Planet{
-	var target Planet
+func setTransits(arrayPlanets []Planet, arrayTransits []Edge) []Planet{
 
-	for _, p := range arrayPlanets{
+	for i, p := range arrayPlanets{
 		for _, p2 := range arrayPlanets{
 			for _, t := range arrayTransits{
-
+			//fmt.Println(p.name, t.startPlanet, t.endPlanet)
 			if p.name == t.startPlanet && p2.name == t.endPlanet{
-				p.numTransits++
-				p.children = append(p.children,p2)
+				arrayPlanets[i].numTransits = arrayPlanets[i].numTransits + 1
+				arrayPlanets[i].children = append(arrayPlanets[i].children, p2)
 			}
 
 
 			}
 		}
+
 	}
-
-
-	return target
+	return arrayPlanets
 }
 
 
@@ -79,7 +77,8 @@ func main() {
 
 	var (
 	successRead bool
-	successFind Planet
+	successFind []Planet
+	root int
 	)
 	/*Tests begin */
 
@@ -87,20 +86,21 @@ func main() {
 	/* Can we read values from user? */
 	var numPlanets, numConnections int
 
-//	fmt.Println("Give me an int for numPlanets please")
 	fmt.Scan(&numPlanets)
 	/* array of planets */
 	var slicePlanets = make([]Planet,numPlanets)
 	for i := 0; i < numPlanets; i++ {
 		fmt.Scan(&slicePlanets[i].name)
-		if (slicePlanets[i].name == "Scarif" || slicePlanets[i].name == "Yavin") {
+		if (slicePlanets[i].name == "Scarif"){
+			slicePlanets[i].cost = 0
+			root = i
+		} else if( slicePlanets[i].name == "Yavin") {
 			slicePlanets[i].cost = 0
 		} else{
-		fmt.Scan(&slicePlanets[i].cost)
+			fmt.Scan(&slicePlanets[i].cost)
 		}
 	}
 
-//	fmt.Println("Give me an int for numConnections please")
 	fmt.Scan(&numConnections)
 	/* array of edges */
 	var sliceTransits = make([]Edge,numConnections)
@@ -109,19 +109,18 @@ func main() {
 		fmt.Scan(&sliceTransits[j].endPlanet)
 	}
 	if successRead == true {
-	fmt.Println("filler")
+		fmt.Println("filler")
 	}
 
-	fmt.Println(slicePlanets)
-	fmt.Println(sliceTransits)
+	successFind = setTransits(slicePlanets, sliceTransits)
+	fmt.Println(successFind[root])
 
-	successFind = searchTransits(slicePlanets, sliceTransits)
-
+	target := searchTransits(sucessFind)
 	/* Now trying to search and find the shortest path */
-	if successFind.name != "Scarif" {
-	fmt.Println("Darth Blockades ", successFind.name)
-	} else{
-	fmt.Println("Leia escapes with the plans!")
-	}
+	//if successFind.name != "Scarif" {
+	//	fmt.Println("Darth Blockades ", successFind.name)
+	//} else{
+	//	fmt.Println("Leia escapes with the plans!")
+//	}
 }
 
