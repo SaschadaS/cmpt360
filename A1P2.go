@@ -24,34 +24,6 @@ type query struct{
 	endComp int
 	endTime int
 }
-
-func readTrace(numTrace int) *[]trace {
-	var TraceData []trace
-	for i := 0; i<numTrace; i++ {
-	fmt.Scan(&TraceData[i].source, &TraceData[i].destination, &TraceData[i].time)
-	}
-	return &TraceData
-}
-
-func readQuery(numQueries int) *[]query {
-	var QueryData []query
-	for i := 0; i<numQueries; i++ {
-	fmt.Scan(&QueryData[i].startComp, &QueryData[i].startTime, &QueryData[i].endComp, &QueryData[i].endTime)
-	}
-	return &QueryData
-}
-
-func checkQueries(queryData []query, traceData []trace, isInfected []bool){
-for _, y := range queryData {
-
-	if isInfected[y.endComp+1] == true{
-	fmt.Println("Y")
-	}else {
-	fmt.Println("N")
-	}
-}
-}
-
 func main(){
 
 var numComputers, numTrace, numQueries int
@@ -69,9 +41,27 @@ queryData := make([]query, numQueries)
 for j, b := range queryData {
 	fmt.Scanln(&b.startComp, &b.startTime, &b.endComp, &b.endTime)
 	queryData[j] = b
+	isInfected[b.startComp-1] = true
+	for _, d := range traceData {
+		if b.startTime <= d.time && d.time <= b.endTime {
+			if isInfected[d.source-1] == true || isInfected[d.destination-1] == true {
+				isInfected[d.destination-1] = true
+				isInfected[d.source-1] = true
+			}
+		}
+	}
+	if isInfected[b.endComp-1] == true {
+		fmt.Println("Y")
+	} else {
+		fmt.Println("N")
+	}
+	for k := 0; k < numComputers; k++{
+		isInfected[k] = false
+	}
 }
 
 fmt.Println(isInfected, traceData, queryData)
 fmt.Println("Compiled successfully!")
 
 }
+
