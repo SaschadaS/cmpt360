@@ -10,7 +10,11 @@ Identifying virus spread in a list of computer interactions.
  */
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"bufio"
+	"os"
+)
 
 type trace struct{
 	source int
@@ -24,23 +28,29 @@ type query struct{
 	endComp int
 	endTime int
 }
-func main(){
 
+func main(){
 var numComputers, numTrace, numQueries int
+var tempLine string
 fmt.Scanln(&numComputers)
 fmt.Scanln(&numTrace)
 isInfected := make([]bool, numComputers)
 traceData := make([]trace, numTrace)
+scanner := bufio.NewReader(os.Stdin)
+
 for i, a := range traceData {
-	fmt.Scanln(&a.source, &a.destination, &a.time)
+	tempLine, _ = scanner.ReadString('\n')
+	fmt.Sscanf(tempLine, "(C%d, C%d, %d)", &a.source, &a.destination, &a.time)
 	traceData[i] = a
 }
-
-fmt.Scanln(&numQueries)
+//fmt.Scanln(&numQueries)
+tempLine, _ = scanner.ReadString('\n')
+fmt.Sscanf(tempLine,"%d", &numQueries)
 queryData := make([]query, numQueries)
 queryOutput := make([]string, numQueries)
 for j, b := range queryData {
-	fmt.Scanln(&b.startComp, &b.startTime, &b.endComp, &b.endTime)
+	tempLine, _ = scanner.ReadString('\n')
+	fmt.Sscanf(tempLine, "C%d, %d, C%d, %d", &b.startComp, &b.startTime, &b.endComp, &b.endTime)
 	queryData[j] = b
 	isInfected[b.startComp-1] = true
 	for _, d := range traceData {
@@ -64,7 +74,6 @@ for j, b := range queryData {
 for l := 0; l < numQueries; l++ {
 	fmt.Println(queryOutput[l])
 }
-
 
 }
 
