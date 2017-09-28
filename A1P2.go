@@ -59,15 +59,19 @@ fmt.Scanln(&numComputers)
 fmt.Scanln(&numTrace)
 isInfected := make([]bool, numComputers)
 traceData := make([]trace, numTrace)
-for _, a := range traceData {
-	fmt.Scan(&a.source, &a.destination, &a.time)
+for i, a := range traceData {
+	fmt.Scanln(&a.source, &a.destination, &a.time)
+	traceData[i] = a
 }
 
-fmt.Scan(numQueries)
+fmt.Scanln(&numQueries)
 queryData := make([]query, numQueries)
+for j, b := range queryData {
+	fmt.Scanln(&b.startComp, &b.startTime, &b.endComp, &b.endTime)
+	queryData[j] = b
+}
 
-checkQueries(queryData, traceData, isInfected)
-
+fmt.Println(isInfected, traceData, queryData)
 fmt.Println("Compiled successfully!")
 
 }
