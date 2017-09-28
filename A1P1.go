@@ -87,16 +87,20 @@ func main() {
 	/* Can we read values from user? */
 	var numPlanets, numConnections int
 
-	fmt.Println("Give me an int for numPlanets please")
+//	fmt.Println("Give me an int for numPlanets please")
 	fmt.Scan(&numPlanets)
 	/* array of planets */
 	var slicePlanets = make([]Planet,numPlanets)
 	for i := 0; i < numPlanets; i++ {
 		fmt.Scan(&slicePlanets[i].name)
+		if (slicePlanets[i].name == "Scarif" || slicePlanets[i].name == "Yavin") {
+			slicePlanets[i].cost = 0
+		} else{
 		fmt.Scan(&slicePlanets[i].cost)
+		}
 	}
 
-	fmt.Println("Give me an int for numConnections please")
+//	fmt.Println("Give me an int for numConnections please")
 	fmt.Scan(&numConnections)
 	/* array of edges */
 	var sliceTransits = make([]Edge,numConnections)
