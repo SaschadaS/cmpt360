@@ -24,7 +24,6 @@ type Planet struct {
 /* Darth Vader's least expensive blockade program */
 
 func setTransits(arrayPlanets []Planet, arrayTransits []Edge) []Planet{
-	//var source, dest Planet
 
 	for i, p := range arrayPlanets{
 		for j, p2 := range arrayPlanets{
@@ -33,8 +32,6 @@ func setTransits(arrayPlanets []Planet, arrayTransits []Edge) []Planet{
 			if p.name == t.startPlanet && p2.name == t.endPlanet{
 				arrayPlanets[i].numTransits = arrayPlanets[i].numTransits + 1
 				arrayPlanets[j].numTransits = arrayPlanets[j].numTransits + 1
-				//source = arrayPlanets[i]
-				//dest = arrayPlanets[j]
 				arrayPlanets[i].children = append(arrayPlanets[i].children, p2.id)
 				arrayPlanets[j].children = append(arrayPlanets[j].children, p.id)
 			}
@@ -48,20 +45,25 @@ func setTransits(arrayPlanets []Planet, arrayTransits []Edge) []Planet{
 
 
 func DFS(root int, arrayPlanets []Planet)int{
-	var goal int
+	goal := -1
 	var isArtPoint bool
 	var x int
 
+	fmt.Println("got to dfs")
+
 	arrayPlanets[root].found = true
 	for len(arrayPlanets[root].children) > 0 {
-
 	x = arrayPlanets[root].children[0]
 	arrayPlanets[root].children = arrayPlanets[root].children[1:]
 
-	if (arrayPlanets[x].found == false) {
-	isArtPoint = checkArticulation(arrayPlanets, x)
+	fmt.Println("Dfsing: ",arrayPlanets[root], "with: ", arrayPlanets[x])
 
-	if isArtPoint == true && arrayPlanets[x].cost < arrayPlanets[goal].cost{
+	if (arrayPlanets[x].found == false) {
+	isArtPoint = checkArticulation(arrayPlanets, x, root)
+
+	if isArtPoint == true && goal == -1 {
+		goal = x
+	} else if arrayPlanets[x].cost < arrayPlanets[goal].cost{
 		goal = x
 	}
 
@@ -73,16 +75,33 @@ func DFS(root int, arrayPlanets []Planet)int{
 	return goal
 }
 
-func checkArticulation(arrayPlanets []Planet,  id int)bool{
-	for i := 0; i < arrayPlanets[id].numTransits; i++ {
-		if arrayPlanets[arrayPlanets[id].children[i]].found==true {
+func checkArticulation(arrayPlanets []Planet,  id int, parent int)bool{
+	var isArticulation bool
+	fmt.Println("got to articulation. id =", id, " parent=", parent)
+
+	if(arrayPlanets[id].numTransits <= 1) {
+		fmt.Println("hit leaf")
 		return false
-		}else{
-		checkArticulation(arrayPlanets, arrayPlanets[id].children[i])
-		return true
+	}
+
+	for i := 0; i < arrayPlanets[id].numTransits; i++ {
+		fmt.Println("Articulating: ", arrayPlanets[id], "with: ", arrayPlanets[id].children[i], "i =",i, " parent= ", parent)
+
+		if (parent == i) {
+			fmt.Println("hit Parent")
+		}
+
+		if (arrayPlanets[arrayPlanets[id].children[i]].found==true && i != parent) {
+			return false
+		}else if (i != parent) {
+			isArticulation = checkArticulation(arrayPlanets, arrayPlanets[id].children[i], id)
+		}
+
+		if (i == arrayPlanets[id].numTransits-1) {
+			return true
 		}
 	}
-	return false
+	return isArticulation
 }
 
 func main(){
@@ -136,6 +155,12 @@ func main(){
 	/* sets int to planet.id of best articulation point, 
 	or 0 if no point exists. */
 	target = DFS(root, successFind)
+
+	/* prints values for each planet */
+	for l := 0; l < numPlanets; l++ {
+	fmt.Println("Record:", successFind[l])
+	}
+
 
 	if target != root {
 		fmt.Println("Darth Blockades ", slicePlanets[target].name)
